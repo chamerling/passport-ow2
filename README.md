@@ -1,4 +1,4 @@
-# Passport-GitHub
+# Passport-OW2
 
 [Passport](http://passportjs.org/) strategy for authenticating with [OW2](http://ow2.org/)
 using the OAuth 2.0 API.
