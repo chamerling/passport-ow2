@@ -1,10 +1,10 @@
 var express = require('express')
   , passport = require('passport')
   , util = require('util')
-  , OW2Strategy = require('passport-ow2').Strategy;
+  , OW2Strategy = require('../../lib/passport-ow2').Strategy;
 
-var OW2_CLIENT_ID = "--insert-ow2-client-id-here--"
-var OW2_CLIENT_SECRET = "--insert-ow2-client-secret-here--";
+var OW2_CLIENT_ID = "abc123"
+var OW2_CLIENT_SECRET = "ssh-secret";
 
 
 // Passport session setup.
@@ -27,26 +27,34 @@ passport.deserializeUser(function(obj, done) {
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and OW2
 //   profile), and invoke a callback with a user object.
-passport.use(new OW2Strategy({
+passport.use('ow2', new OW2Strategy({
     clientID: OW2_CLIENT_ID,
     clientSecret: OW2_CLIENT_SECRET,
-    callbackURL: "http://127.0.0.1:3000/auth/ow2/callback"
+    // remote oauth service
+    authorizationURL: 'http://localhost:3000/dialog/authorize',
+    tokenURL: 'http://localhost:3000/oauth/token',
+    profileURL: 'http://localhost:3000/api/userinfo',
+    //skipUserProfile : true,
+    // local callback
+    callbackURL: 'http://localhost:3001/auth/ow2/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
+    
     process.nextTick(function () {
+
+      console.log('PROFILE ', profile);
       
       // To keep the example simple, the user's OW2 profile is returned to
       // represent the logged-in user.  In a typical application, you would want
       // to associate the OW2 account with a user record in your database,
       // and return that user instead.
+      // Must return a user so it will be cached in the session
+      
       return done(null, profile);
     });
   }
 ));
-
-
-
 
 var app = express.createServer();
 
@@ -54,7 +62,9 @@ var app = express.createServer();
 app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
-  app.use(express.logger());
+  //app.use(express.logger());
+  app.use(express.logger('dev'))
+  
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -108,8 +118,9 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.listen(3000);
-
+app.listen(3001, function() {
+  console.log('Server is started on port 3001')
+});
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If

@@ -56,7 +56,7 @@ vows.describe('OW2Strategy').addBatch({
       'should load profile' : function(err, profile) {
         assert.equal(profile.provider, 'ow2');
         assert.equal(profile.id, '1');
-        assert.equal(profile.username, 'chamerlng');
+        assert.equal(profile.username, 'chamerling');
         assert.equal(profile.displayName, 'christophe hamerling');
       },
       'should set raw property' : function(err, profile) {
