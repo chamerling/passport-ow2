@@ -1,9 +1,11 @@
 # Passport-OW2
 
+Note : The OW2 API is currently under development, you will not be able to use OAuth or anything else since the API is not online...
+
 [Passport](http://passportjs.org/) strategy for authenticating with [OW2](http://ow2.org/)
 using the OAuth 2.0 API.
 
-This module lets you authenticate using GitHub in your Node.js applications.
+This module lets you authenticate using OW2 in your Node.js applications.
 By plugging into Passport, OW2 authentication can be easily and
 unobtrusively integrated into any application or framework that supports
 [Connect](http://www.senchalabs.org/connect/)-style middleware, including
